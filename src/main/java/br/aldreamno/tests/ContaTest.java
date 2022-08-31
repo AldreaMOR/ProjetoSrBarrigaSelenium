@@ -1,0 +1,49 @@
+package br.aldreamno.tests;
+
+import br.aldreamno.core.BaseTest;
+import br.aldreamno.core.Propriedades;
+import br.aldreamno.pages.ContasPage;
+import br.aldreamno.pages.MenuPage;
+import org.junit.Assert;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING) //Para chamada das funções na ordem por nome
+public class ContaTest extends BaseTest {
+
+    MenuPage menuPage = new MenuPage();
+    ContasPage contasPage = new ContasPage();
+
+    @Test
+    public void test1_InserirConta(){
+        menuPage.acessarTelaInserirConta();
+
+        contasPage.setNome("Conta do Teste");
+        contasPage.salvar();
+
+        Assert.assertEquals("Conta adicionada com sucesso!",contasPage.obterMensagemSucesso());
+    }
+
+    @Test
+    public void test2_AlterarConta() {
+        menuPage.acessarTelaListarConta();
+
+        contasPage.clicarAlterarConta("Conta do Teste");
+        contasPage.setNome(Propriedades.NOME_CONTA_ALTERADA);
+        contasPage.salvar();
+
+        Assert.assertEquals("Conta alterada com sucesso!",contasPage.obterMensagemSucesso());
+
+    }
+
+    @Test
+    public void test3_InserirContaMesmoNome(){
+        menuPage.acessarTelaInserirConta();
+
+        contasPage.setNome(Propriedades.NOME_CONTA_ALTERADA);
+        contasPage.salvar();
+
+        Assert.assertEquals("Já existe uma conta com esse nome!",contasPage.obterMensagemErro());
+    }
+}
